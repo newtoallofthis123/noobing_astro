@@ -3,6 +3,13 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+
+let posts = (await getCollection('blog')).sort(
+	(a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+posts = posts.slice(0).reverse();
 ---
 
 <!DOCTYPE html>
@@ -11,40 +18,71 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
-		<Header title={SITE_TITLE} />
+		<Header title={SITE_TITLE}></Header>
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
+			<h2>
+				Noobing With The Noob
+			</h2>
 			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
+				Hi! I am Ishan! I go by NoobScience online. I am a student and technology is my JAM. I do have an official blog on Hashnode but I wanted a more personal space to write about my thoughts and ideas. I am a big fan of the vanilla web and I wanted to build this blog from scratch. So I am using a NextJS base for my site. All blog posts are indiviual javascript files and are compiled into static HTML pages. No database, no server side rendering. No Complex CSS frameworks too.
 			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/pages/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<div>
+			<h1>
+				📚 Recommendations
+			</h1>
+            {
+                posts.map((post) => (
+                    <div class="recommendation">
+                        {
+                            post.data.heroImage && (
+                            <div class="recommend-img">
+                            <img src={post.data.heroImage} alt={post.data.description}>
+                            </div>
+                            )
+                        }
+                        <div class="recommend-content">
+                        <h1>{post.data.title}</h1>
+                        <p class="date">
+                        <FormattedDate date={post.data.pubDate} /> IST
+                        </p>
+                        <p class="description">
+                        {
+                            post.data.description.substring(0, 180) + '...'
+                        }
+                            </p>
+                            <div class="btn-div">
+                                                    <button class="btn"><span>Read More</span><span><a href={"/blog/" + post.slug} class="btn-link">Clicky</a></span></button>
+                        <button class="btn"><span>Download PDF</span><span><a href={"/blog/" + post.slug} class="btn-link">Clicky</a></span></button> 
+                                </div>
+                        </div>                       
+                    </div>
+                ))
+            }
+        </div>
+		<div>
+		<p>
+			Okay, as you can see I want to be not talking about technology, 
+			but it leaks into my words. Anyways, this is a place I just randomly 
+			share my thoughts. There's a plan for more improvements and features, 
+			but for now, this is it. If you want to discuss something, please feel 
+			free to reach out on <a href="htt*"><i class="bi bi-twitter"></i> Twitter</a>. One more thing, I am not a native English 
+			speaker, so please excuse any grammatical errors.
+		</p>
+		<p>	
+		I hope you enjoy your stay here. I'll try to keep this blog updated
+		 as much as I can. I'll see you around!
+		Trying something out
+		I have been thinking about this for quite a while now and I want to try
+		 it out. So this blog is a subsidiary of the main site NoobScience and is
+		  hosted on the same server. The code is available on GitHub. So, if you
+		   want to write a article on this blog, you can just fork the repo, 
+		   write your article and send a pull request. I'll review it and merge it. 
+		   Cool Right ?! Feel free to try it out. More info and guidelines coming soon.
+		</p>	
+		</div>
 		</main>
-		<Footer />
+		<Footer></Footer>
 	</body>
 </html>
+<style>
+</style>

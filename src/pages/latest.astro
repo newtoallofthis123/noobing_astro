@@ -1,0 +1,66 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+
+let post = (await getCollection('blog')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+)[0];
+// posts = posts.slice(0).reverse().slice(0, 1);
+---
+<script is:inline>
+    let time = 10;
+    let timer = setInterval(() => {
+        time--;
+        document.getElementById('time').innerHTML = time.toString();
+        if (time == 0) {
+            clearInterval(timer);
+            window.location.href = document.getElementById('redirect-link').href;
+        }
+    }, 1000);
+</script>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+        <main>
+            <p>
+                Hey! This is the latest blog post.
+                Hope you have fun reading it!
+                You'll automatically be redirected to the blog page in <span id="time">10</span> seconds.
+                You can click <a id="redirect-link" href={"/blog/"+post.slug}>here</a> to go there now.
+            </p>
+            <div class="recommendation">
+                {
+                    post.data.heroImage && (
+                                                <div class="recommend-img">
+                    <img src={post.data.heroImage} alt={post.data.description}>
+                    </div>
+                    )
+                }
+                <div class="recommend-content">
+                <h1>{post.data.title}</h1>
+                <p class="date">
+                <FormattedDate date={post.data.pubDate} /> IST
+                </p>
+                <p class="description">
+                {
+                    post.data.description.substring(0, 200) + '...'
+                }
+                    </p>
+                    <div class="btn-div">
+                                            <button class="btn"><span>Read More</span><span><a href={"/blog/" + post.slug} class="btn-link">Clicky</a></span></button>
+                <button class="btn"><span>Download PDF</span><span><a href={"/blog/" + post.slug} class="btn-link">Clicky</a></span></button> 
+                        </div>
+                </div>                       
+            </div>
+        </main>
+		<Footer />
+	</body>
+</html>

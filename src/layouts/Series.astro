@@ -1,0 +1,37 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const { description, series, } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={series} description={description} />
+		<style>
+			.title {
+				font-size: 2em;
+				margin: 0.25em 0 0;
+			}
+			hr {
+				border-top: 1px solid #ddd;
+				margin: 1rem 0;
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+        <main>
+            <h1 class="title">{series}</h1>
+            <hr />
+            <slot />
+            <hr />
+        </main>
+		<Footer />
+	</body>
+</html>

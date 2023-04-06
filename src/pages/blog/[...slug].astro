@@ -1,12 +1,16 @@
 ---
 import { CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
+import readingTime from 'reading-time'
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: post,
+	return posts.map((post) => (
+	{
+		params: { slug: post.slug,  },
+		props: {...post,
+			readTime: readingTime(post.body).text,
+		},
 	}));
 }
 type Props = CollectionEntry<'blog'>;
@@ -15,7 +19,33 @@ const post = Astro.props;
 const { Content } = await post.render();
 ---
 
-<BlogPost {...post.data}>
-	<h1>{post.data.title}</h1>
+	<BlogPost {...post.data}>
+	<div class="blog">
+		<h1>{post.data.title}</h1>
+	<div>
+		<i class="bi bi-calendar"></i>
+		{new Date(post.data.pubDate).toUTCString()}
+	</div>
+	<div>
+		<i class="bi bi-clock"></i>
+		{post.readTime}
+	</div>
+	<div>
 	<Content />
+	</div>
+	</div>
 </BlogPost>
+<style>
+	.blog {
+		margin: 2rem 10rem;
+	}
+
+	div{
+		font-family: var(--font);
+		padding: 0.2rem 0.1rem;
+	}
+
+	h1{
+		font-size: 2.4rem;
+	}
+</style>

@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import Series from '../../layouts/Series.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.data.series },
+		props: post,
+	}));
+}
+
+const post = Astro.props;
+---
+
+<Series {...post.data}>
+	<h1>{post.data.title}</h1>
+	<h1>
+		WIP
+	</h1>
+</Series>
